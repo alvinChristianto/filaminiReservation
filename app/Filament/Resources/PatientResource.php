@@ -31,7 +31,8 @@ class PatientResource extends Resource
                         'cat' => 'Cat',
                         'dog' => 'Dog',
                         'rabbit' => 'Rabbit',
-                    ]),
+                    ])
+                    ->required(),
 
                 Forms\Components\DatePicker::make('date_of_birth')
                     ->required()
@@ -55,17 +56,7 @@ class PatientResource extends Resource
                             ->required(),
                     ])
                     ->required(),
-                Forms\Components\TextInput::make('description')
-                    ->required()
-                    ->maxLength(255)
-                    ->columnSpan('full'),
-                Forms\Components\Textarea::make('notes')
-                    ->maxLength(65535)
-                    ->columnSpan('full'),
-                Forms\Components\TextInput::make('price')
-                    ->numeric()
-                    ->prefix('Rp')
-                    ->maxValue(42949672.95),
+              
             ]);
     }
 
@@ -76,15 +67,11 @@ class PatientResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('date_of_birth'),
+                Tables\Columns\TextColumn::make('date_of_birth')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('owner.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('price')
-                    ->money('EUR')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('type')

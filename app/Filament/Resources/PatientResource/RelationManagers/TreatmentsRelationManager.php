@@ -20,7 +20,15 @@ class TreatmentsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('description')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpan('full'),
+                Forms\Components\Textarea::make('notes')
+                    ->maxLength(65535)
+                    ->columnSpan('full'),
+                Forms\Components\TextInput::make('price')
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->maxValue(42949672.95),
             ]);
     }
 
@@ -30,6 +38,11 @@ class TreatmentsRelationManager extends RelationManager
             ->recordTitleAttribute('description')
             ->columns([
                 Tables\Columns\TextColumn::make('description'),
+                Tables\Columns\TextColumn::make('price')
+                ->prefix('Rp ')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime(),
             ])
             ->filters([
                 //
