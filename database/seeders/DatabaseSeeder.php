@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Room;
+use App\Models\RoomService;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +16,31 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        Room::factory()->create([
+            'name' => 'Deluxe Room',
+            'quantity' => 2,
+            'description' => 'lorem ipsum',
+            'status' => 'active' ,
         ]);
+
+        Room::factory()->create([
+            'name' => 'Standart Room',
+            'quantity' => 2,
+            'description' => 'lorem ipsum',
+            'status' => 'active' ,
+        ]);
+
+        RoomService::factory()->create([
+            'name_service' => 'Air Mineral',
+            'type' => 'free',
+            'description' => 'lorem ipsum',
+        ]);
+
+       
     }
 }
