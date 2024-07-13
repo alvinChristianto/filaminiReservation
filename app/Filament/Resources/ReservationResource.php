@@ -29,6 +29,8 @@ class ReservationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-m-identification';
 
+    protected static ?string $navigationGroup = 'Reservasi';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -45,6 +47,7 @@ class ReservationResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     //->required()
+                    ->email()
                     ->maxLength(255),
                 Forms\Components\Select::make('country')
                     ->options([
