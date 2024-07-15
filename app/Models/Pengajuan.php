@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\MoneyCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,9 +30,9 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(TipePengajuan::class);
     }
+    protected $casts = [
+        'nominal' => MoneyCast::class,
+    ];
 
-    // public function treatments(): HasMany
-    // {
-    //     return $this->hasMany(Treatment::class);
-    // }
+  
 }

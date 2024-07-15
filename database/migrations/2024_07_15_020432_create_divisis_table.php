@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('divisis', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->enum('tipe', ['Head Office', 'HRD', 'Finance', 'The Cabin Hotel Sutomo', 'The Cabin Hotel Gandekan']);
+            $table->enum('tipe', ['HO', 'HOTEL']);
 
             $table->timestamps();
         });

@@ -16,14 +16,15 @@ return new class extends Migration
             $table->string('nama_pengaju');
             $table->enum('status_pengajuan', ['DIAJUKAN', 'SELESAI', 'DITOLAK']);
 
-            $table->foreignId('id_divisi')->constrained('divisis')->cascadeOnDelete();
+            $table->foreignId('divisi_id')->constrained('divisis')->cascadeOnDelete();
             $table->string('judul_pengajuan');
             $table->unsignedInteger('nominal')->nullable();
-            $table->foreignId('id_tipe_pengajuan')->constrained('tipe_pengajuans')->cascadeOnDelete();
-            $table->foreignId('id_bank')->constrained('banks')->cascadeOnDelete();
-            $table->integer('nomor_rekening')->nullable();
+            $table->foreignId('tipe_pengajuan_id')->constrained('tipe_pengajuans')->cascadeOnDelete();
+            $table->foreignId('bank_id')->constrained('banks')->cascadeOnDelete();
+            $table->string('nomor_rekening')->nullable();
             $table->string('nama_pemilik_rekening')->nullable();
-            $table->dateTime('check_in_time')->nullable();
+            $table->dateTime('tanggal_akhir_bayar')->nullable();
+            $table->text('notes')->nullable();
             $table->string('image_lampiran_pengajuan')->nullable();
             $table->string('image_approval_pengajuan')->nullable();
             $table->timestamps();
