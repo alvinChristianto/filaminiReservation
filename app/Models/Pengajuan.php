@@ -30,6 +30,7 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(TipePengajuan::class);
     }
+
     protected $casts = [
         'nominal' => MoneyCast::class,
     ];

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PengajuanResource\Pages;
 use App\Filament\Resources\PengajuanResource\RelationManagers;
 use App\Models\Pengajuan;
+use App\Policies\PengajuanPolicy;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
@@ -16,7 +17,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PengajuanResource extends Resource
+use Illuminate\Support\Facades\Log;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+
+class PengajuanResource extends Resource implements HasShieldPermissions
+
 {
     protected static ?string $model = Pengajuan::class;
 
@@ -132,5 +137,41 @@ class PengajuanResource extends Resource
             'create' => Pages\CreatePengajuan::route('/create'),
             'edit' => Pages\EditPengajuan::route('/{record}/edit'),
         ];
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'view_all_data',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'publish'
+        ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        $userRoles = $user->roles; // Get the user's roles collection
+
+        $hasPermission = false; // Flag to track permission status
+
+        foreach ($userRoles as $role) {
+            if ($role->hasPermissionTo('view_all_data_pengajuan')) {
+                $hasPermission = true; // Set flag to true if any role has the permission
+                break; // Exit the loop once permission is found (optimization)
+            }
+        }
+
+        if ($hasPermission) {
+            return parent::getEloquentQuery();
+        } else {
+            return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
+        }
     }
 }

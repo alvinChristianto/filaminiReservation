@@ -2,19 +2,20 @@
 
 namespace App\Policies;
 
-use App\Models\Bank;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Bank;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BankPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
         return $user->can('view_any_bank');
-        //
     }
 
     /**
@@ -22,8 +23,7 @@ class BankPolicy
      */
     public function view(User $user, Bank $bank): bool
     {
-     
-        return $user->can('view_bank');   //
+        return $user->can('view_bank');
     }
 
     /**
@@ -31,8 +31,6 @@ class BankPolicy
      */
     public function create(User $user): bool
     {
-        //
-        
         return $user->can('create_bank');
     }
 
@@ -41,7 +39,6 @@ class BankPolicy
      */
     public function update(User $user, Bank $bank): bool
     {
-        
         return $user->can('update_bank');
     }
 
@@ -50,26 +47,62 @@ class BankPolicy
      */
     public function delete(User $user, Bank $bank): bool
     {
-     
-        return $user->can('delete_bank');   //
+        return $user->can('delete_bank');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('delete_any_bank');
+    }
+
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Bank $bank): bool
+    {
+        return $user->can('force_delete_bank');
+    }
+
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('force_delete_any_bank');
+    }
+
+    /**
+     * Determine whether the user can restore.
      */
     public function restore(User $user, Bank $bank): bool
     {
-        
         return $user->can('restore_bank');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can bulk restore.
      */
-    public function forceDelete(User $user, Bank $bank): bool
+    public function restoreAny(User $user): bool
     {
-        
-        return $user->can('force_delete_bank');
-        //
+        return $user->can('restore_any_bank');
+    }
+
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Bank $bank): bool
+    {
+        return $user->can('replicate_bank');
+    }
+
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
+    {
+        return $user->can('reorder_bank');
     }
 }

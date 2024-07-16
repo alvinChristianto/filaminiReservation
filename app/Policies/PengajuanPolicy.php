@@ -13,11 +13,19 @@ class PengajuanPolicy
     /**
      * Determine whether the user can view any models.
      */
+    public function viewAllData(User $user,  Pengajuan $pengajuan): bool
+    {
+        if ($user->can('view_all_data_pengajuan')) {
+            return true; // Allow admins to view all users
+        }
+
+        return $user->id === $pengajuan->id;
+    }
+
     public function viewAny(User $user): bool
     {
         return $user->can('view_any_pengajuan');
     }
-
     /**
      * Determine whether the user can view the model.
      */
@@ -63,7 +71,7 @@ class PengajuanPolicy
      */
     public function forceDelete(User $user, Pengajuan $pengajuan): bool
     {
-        return $user->can('force_delete_pengajuan');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -71,7 +79,7 @@ class PengajuanPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_pengajuan');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -79,7 +87,7 @@ class PengajuanPolicy
      */
     public function restore(User $user, Pengajuan $pengajuan): bool
     {
-        return $user->can('restore_pengajuan');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -87,7 +95,7 @@ class PengajuanPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_pengajuan');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -95,7 +103,7 @@ class PengajuanPolicy
      */
     public function replicate(User $user, Pengajuan $pengajuan): bool
     {
-        return $user->can('replicate_pengajuan');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +111,6 @@ class PengajuanPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_pengajuan');
+        return $user->can('{{ Reorder }}');
     }
 }
