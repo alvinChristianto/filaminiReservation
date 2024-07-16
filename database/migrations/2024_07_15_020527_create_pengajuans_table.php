@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('nama_pengaju');
             $table->enum('status_pengajuan', ['DIAJUKAN', 'SELESAI', 'DITOLAK']);
 
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            
             $table->foreignId('divisi_id')->constrained('divisis')->cascadeOnDelete();
             $table->string('judul_pengajuan');
             $table->unsignedInteger('nominal')->nullable();

@@ -31,6 +31,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->registration()
             ->path('admin')
+            ->brandName('Filament Koala')
+            ->favicon(asset('logotest.png'))
+            ->brandLogo(asset('logotest.png')) 
             ->login()
             ->colors([
                 'primary' => Color::Orange,
