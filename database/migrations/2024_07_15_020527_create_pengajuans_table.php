@@ -29,6 +29,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->string('image_lampiran_pengajuan')->nullable();
             $table->string('image_approval_pengajuan')->nullable();
+            $table->dateTime('tanggal_approval')->nullable();
             $table->timestamps();
         });
     }

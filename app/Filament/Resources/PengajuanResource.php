@@ -34,6 +34,7 @@ class PengajuanResource extends Resource implements HasShieldPermissions
     {
         return $form
             ->schema([
+
                 Fieldset::make('Data Pengaju')
                     ->schema([
                         Forms\Components\TextInput::make('nama_pengaju')
@@ -44,7 +45,16 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                             ->searchable()
                             ->preload()
                             ->required(),
-
+                        Forms\Components\Select::make('user_id')
+                            ->relationship('user', 'name')
+                            ->label('User Pengaju yang terdaftar')
+                            ->hidden(!auth()->user()->hasRole('super_admin'))
+                            ->required(),
+                        Forms\Components\TextInput::make('status_pengajuan')
+                            ->label('Status Pengajuan')
+                            ->hidden(!auth()->user()->hasRole('super_admin'))
+                            ->disabled()
+                            
                     ])
                     ->columns(2),
 
@@ -54,7 +64,9 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                             ->required()
                             ->maxLength(255),
                         Forms\Components\Select::make('tipe_pengajuan_id')
-                            ->label('Pengajuan RAB atau Non RAB')
+                            ->helperText(str('**RAB**: pengajuan yang ...,<br> **Non RAB**: pengajuan yang ...')->inlineMarkdown()->toHtmlString())
+
+                            ->label('Tipe Pengajuan')
                             ->relationship('tipe_pengajuan', 'nama_tipe')
                             ->required(),
                         Forms\Components\TextInput::make('nominal')
@@ -102,7 +114,12 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('judul_pengajuan')
                     ->searchable(isIndividual: true),
                 Tables\Columns\TextColumn::make('status_pengajuan')
-                    ->sortable(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'DIAJUKAN' => 'gray',
+                        'SELESAI' => 'success',
+                        'DITOLAK' => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('nominal')
             ])
             ->filters([

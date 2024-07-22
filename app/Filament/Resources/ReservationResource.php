@@ -127,6 +127,8 @@ class ReservationResource extends Resource
                 // Forms\Components\TextInput::make('company_name')
                 //     ->visible(fn (Get $get): bool => $get('is_company'))
 
+                // Forms\Components\Field::make('start_date'),
+                // Forms\Components\Field::make('end_date')->afterOrEqual('start_date')
             ]);
     }
 
