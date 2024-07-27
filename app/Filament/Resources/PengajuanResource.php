@@ -19,6 +19,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 use Illuminate\Support\Facades\Log;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use pxlrbt\FilamentExcel\Columns\Column;
 
 class PengajuanResource extends Resource implements HasShieldPermissions
 
@@ -166,10 +171,21 @@ class PengajuanResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                ExportAction::make()->exports([
+                    // Pass a string
+                    ExcelExport::make('table')
+                        ->withFilename(date('Y-m-d') . ' - export')
+                        ->withColumns([
+                            Column::make('judul_pengajuan'),
+                            Column::make('created_at'),
+                            Column::make('deleted_at'),
+                        ])
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
                 ]),
             ]);
     }
