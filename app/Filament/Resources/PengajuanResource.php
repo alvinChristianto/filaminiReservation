@@ -52,9 +52,9 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                             ->required(),
                         Forms\Components\TextInput::make('status_pengajuan')
                             ->label('Status Pengajuan')
-                            ->hidden(!auth()->user()->hasRole('super_admin'))
+                            // ->hidden(!auth()->user()->hasRole('super_admin'))
                             ->disabled()
-                            
+
                     ])
                     ->columns(2),
 
@@ -73,7 +73,7 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                             ->numeric()
                             ->prefix('Rp')
                             ->maxValue(42949672.95),
-                        Forms\Components\Textarea::make('notes')
+                        Forms\Components\Textarea::make('notes_pengajuan')
                             // ->required()
                             ->rows(5)
                             ->cols(5),
@@ -91,16 +91,46 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                             ->maxLength(255),
                         DateTimePicker::make('tanggal_akhir_bayar')
                             ->seconds(false),
+
                     ])
                     ->columns(3),
 
-                Fieldset::make('Lampiran')
+                Fieldset::make('Lampiran Pengajuan')
                     ->schema([
                         FileUpload::make('image_lampiran_pengajuan')
                             ->image()
                             ->directory('pengajuan-attachments')
                             ->deletable(false)
-                            ->columnSpan('full'),
+                            ->columnSpan('full')
+                            ->openable(),
+                        DateTimePicker::make('tanggal_approval')
+                            ->seconds(false)
+                            ->disabled(),
+                        DateTimePicker::make('tanggal_pembelanjaan')
+                            ->seconds(false)
+                            ->disabled(),
+                        FileUpload::make('image_lampiran_approval')
+                            ->image()
+                            ->directory('approval-attachments')
+                            ->deletable(false)
+                            ->disabled()
+                            ->openable(),
+                        FileUpload::make('image_lampiran_pembelanjaan')
+                            ->image()
+                            ->directory('approval-attachments')
+                            ->deletable(false)
+                            ->disabled()
+                            ->openable(),
+                        Forms\Components\Textarea::make('notes_approval')
+                            // ->required()
+                            ->rows(5)
+                            ->cols(5)
+                            ->disabled(),
+                        Forms\Components\Textarea::make('notes_pembelanjaan')
+                            // ->required()
+                            ->rows(5)
+                            ->cols(5)
+                            ->disabled(),
                     ])
                     ->columns(2),
 
@@ -117,18 +147,22 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'DIAJUKAN' => 'gray',
+                        'DISETUJUI' => 'success',
                         'SELESAI' => 'success',
                         'DITOLAK' => 'danger',
                     }),
                 Tables\Columns\TextColumn::make('nominal')
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status_pembayaran')
+                Tables\Filters\SelectFilter::make('status_pengajuan')
                     ->options([
                         'DIAJUKAN' => 'DIAJUKAN',
+                        'DISETUJUI' => 'DISETUJUI',
                         'SELESAI' => 'SELESAI',
                         'DITOLAK' => 'DITOLAK',
                     ]),
+                Tables\Filters\SelectFilter::make('divisi')
+                    ->relationship('divisi', 'nama')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -166,7 +200,6 @@ class PengajuanResource extends Resource implements HasShieldPermissions
             'update',
             'delete',
             'delete_any',
-            'publish'
         ];
     }
 

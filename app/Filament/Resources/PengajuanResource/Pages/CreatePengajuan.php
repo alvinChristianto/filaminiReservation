@@ -18,4 +18,10 @@ class CreatePengajuan extends CreateRecord
         $record = static::getModel()::create($data);
         return $record;
     }
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['last_edited_by_id'] = auth()->id();
+
+        return $data;
+    }
 }
