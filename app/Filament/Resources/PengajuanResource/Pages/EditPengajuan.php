@@ -17,6 +17,7 @@ class EditPengajuan extends EditRecord
     protected static string $resource = PengajuanResource::class;
     protected $allowedUserIds = [1];
 
+
     protected function getHeaderActions(): array
     {
         return [
@@ -108,16 +109,20 @@ class EditPengajuan extends EditRecord
 
     protected function getFormActions(): array
     {
+
+
         return [
-            ...parent::getFormActions(),
+            ...parent::getFormActions()
+            // ->hidden(fn (Pengajuan $record) => $record->status_pengajuan !== 'DISETUJUI')
             // Actions\EditAction::make()
             //     ->using(function (Pengajuan $record, array $data): Pengajuan {
             //         $record->fill($data);
             //         $record->saveOrFail();
-            //         dd($data);
+            //         dd($record);
             //         return $record;
             //     })
-            //     ->hidden(fn (Pengajuan $record) => $record->status_pengajuan === 'SELESAI' || !in_array(auth()->id(), $this->allowedUserIds))
+            //     ->hidden(fn (Pengajuan $record) => $record->status_pengajuan === 'SELESAI' )
+                // || !in_array(auth()->id(), $this->allowedUserIds)
         ];
     }
     protected function mutateFormDataBeforeSave(array $data): array

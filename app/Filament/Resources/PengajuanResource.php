@@ -171,16 +171,22 @@ class PengajuanResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                ExportAction::make()->exports([
-                    // Pass a string
-                    ExcelExport::make('table')
-                        ->withFilename(date('Y-m-d') . ' - export')
-                        ->withColumns([
-                            Column::make('judul_pengajuan'),
-                            Column::make('created_at'),
-                            Column::make('deleted_at'),
-                        ])
-                ])
+                // ExportAction::make()
+                //     ->label('Xls')
+                //     ->exports([
+                //         // Pass a string
+                //         ExcelExport::make('table')
+                //             ->withFilename(date('Y-m-d') . ' - export')
+                //             ->withColumns([
+                //                 Column::make('judul_pengajuan'),
+                //                 Column::make('created_at'),
+                //                 Column::make('deleted_at'),
+                //             ])
+                //     ]),
+                Tables\Actions\Action::make('Pdf')
+                    ->icon('heroicon-m-clipboard')
+                    ->url(fn (Pengajuan $record) => route('incident.report', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
