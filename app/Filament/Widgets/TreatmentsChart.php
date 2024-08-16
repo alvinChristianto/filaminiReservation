@@ -11,6 +11,12 @@ class TreatmentsChart extends ChartWidget
 {
     protected static ?string $heading = 'Treatments';
 
+    public static function canView(): bool
+    {
+        // return auth()->user()->isAdmin();
+        return true;
+    }
+    
     protected function getData(): array
     {
         $data = Trend::model(Treatment::class)

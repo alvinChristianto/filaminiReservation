@@ -6,6 +6,7 @@ use App\Models\Bank;
 use App\Models\Divisi;
 use App\Models\Room;
 use App\Models\RoomService;
+use App\Models\RoomType;
 use App\Models\TipePengajuan;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -24,14 +25,14 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Room::factory()->create([
+        RoomType::factory()->create([
             'name' => 'Deluxe Room',
             'quantity' => 2,
             'description' => 'lorem ipsum',
             'status' => 'active',
         ]);
 
-        Room::factory()->create([
+        RoomType::factory()->create([
             'name' => 'Standart Room',
             'quantity' => 2,
             'description' => 'lorem ipsum',

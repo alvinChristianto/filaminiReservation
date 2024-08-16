@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->string('id');
             // $table->string('token_reservation');
-            $table->foreignId('id_room')->constrained('rooms')->cascadeOnDelete();
+            $table->foreignId('id_room')->constrained('room_types')->cascadeOnDelete();
             $table->enum('type_reservation', ['RESERVATION', 'OTA', 'WALKIN'])->nullable();
             $table->enum('payment_status', ['UNPAID', 'UNPAID_BOOKED', 'PAID', 'EXPIRED']);
             $table->string('first_name')->nullable();
@@ -23,10 +23,13 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->text('address')->nullable();
             $table->string('image_identity')->nullable();
+            $table->boolean('is_hour_reservation');
             $table->dateTime('check_in_time')->nullable();
             $table->dateTime('check_out_time')->nullable();
+            $table->integer('durations')->nullable();
             $table->integer('room_count')->nullable();
             $table->unsignedInteger('price')->nullable();
+            
             $table->text('notes')->nullable();
             $table->timestamps();
         });

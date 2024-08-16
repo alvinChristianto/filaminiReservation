@@ -24,6 +24,11 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Filament Shield';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -81,5 +86,4 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
-    
 }
