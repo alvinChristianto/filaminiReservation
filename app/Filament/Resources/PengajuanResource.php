@@ -170,6 +170,7 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                     ->relationship('divisi', 'nama')
             ])
             ->actions([
+                Tables\Actions\ViewActiongit::make(),
                 Tables\Actions\EditAction::make(),
                 // ExportAction::make()
                 //     ->label('Xls')

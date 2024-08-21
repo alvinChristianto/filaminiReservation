@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^2.2",
         "bezhansalleh/filament-shield": "^3.2",
         "filament/filament": "^3.2",
+        "filament/infolists": "^3.2",
         "flowframe/laravel-trend": "^0.2.0",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
