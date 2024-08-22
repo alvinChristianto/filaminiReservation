@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Pengajuan;
+use App\Models\LaporanKerja;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PengajuanPolicy
+class LaporanKerjaPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class PengajuanPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_pengajuan');
+        return $user->can('view_any_laporan::kerja');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Pengajuan $pengajuan): bool
+    public function view(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('view_pengajuan');
+        return $user->can('view_laporan::kerja');
     }
 
     /**
@@ -31,23 +31,23 @@ class PengajuanPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_pengajuan');
+        return $user->can('create_laporan::kerja');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Pengajuan $pengajuan): bool
+    public function update(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('update_pengajuan');
+        return $user->can('update_laporan::kerja');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Pengajuan $pengajuan): bool
+    public function delete(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('delete_pengajuan');
+        return $user->can('delete_laporan::kerja');
     }
 
     /**
@@ -55,15 +55,15 @@ class PengajuanPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_pengajuan');
+        return $user->can('delete_any_laporan::kerja');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Pengajuan $pengajuan): bool
+    public function forceDelete(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('{{ ForceDelete }}');
+        return $user->can('force_delete_laporan::kerja');
     }
 
     /**
@@ -71,15 +71,15 @@ class PengajuanPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('{{ ForceDeleteAny }}');
+        return $user->can('force_delete_any_laporan::kerja');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Pengajuan $pengajuan): bool
+    public function restore(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('{{ Restore }}');
+        return $user->can('restore_laporan::kerja');
     }
 
     /**
@@ -87,15 +87,15 @@ class PengajuanPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('{{ RestoreAny }}');
+        return $user->can('restore_any_laporan::kerja');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Pengajuan $pengajuan): bool
+    public function replicate(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('{{ Replicate }}');
+        return $user->can('replicate_laporan::kerja');
     }
 
     /**
@@ -103,6 +103,6 @@ class PengajuanPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('{{ Reorder }}');
+        return $user->can('reorder_laporan::kerja');
     }
 }
