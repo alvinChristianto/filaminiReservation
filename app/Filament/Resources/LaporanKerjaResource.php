@@ -12,6 +12,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Grouping\Group;
 use pxlrbt\FilamentExcel\Columns\Column;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Filament\Tables\Table;
@@ -85,11 +86,15 @@ class LaporanKerjaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('judul_pekerjaan')
+                    ->limit(15)
                     ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('divisi.nama'),
+                Tables\Columns\TextColumn::make('divisi.nama')
+                    ->sortable('desc'),
 
                 Tables\Columns\TextColumn::make('jam_mulai'),
                 Tables\Columns\TextColumn::make('jam_selesai'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->sortable('desc'),
 
             ])
             ->filters([
@@ -106,6 +111,7 @@ class LaporanKerjaResource extends Resource
                     ExportBulkAction::make()->exports([
                         ExcelExport::make()->withColumns([
                             Column::make('judul_pekerjaan'),
+                            Column::make('divisi.nama'),
                             Column::make('jam_mulai'),
                             Column::make('jam_selesai'),
                             Column::make('deskripsi_masalah'),
@@ -114,6 +120,10 @@ class LaporanKerjaResource extends Resource
                         ]),
                     ]),
                 ]),
+            ])
+            ->groups([
+                Group::make('divisi.nama')
+                    ->orderQueryUsing(fn(Builder $query, string $direction) => $query->orderBy('created_at', 'asc')),
             ]);
     }
 
@@ -132,7 +142,7 @@ class LaporanKerjaResource extends Resource
             'edit' => Pages\EditLaporanKerja::route('/{record}/edit'),
         ];
     }
-    
+
     public static function getPermissionPrefixes(): array
     {
         return [
@@ -167,5 +177,4 @@ class LaporanKerjaResource extends Resource
             return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
         }
     }
-
 }

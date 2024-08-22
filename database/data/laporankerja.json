@@ -1,0 +1,26 @@
+[
+    {
+        "judul_pekerjaan": "pekerjaan 1",
+        "divisi_id": "1",
+        "jam_mulai": "2024-08-22 12:20:40",
+        "jam_selesai": "2024-08-22 14:20:40",
+        "deskripsi_masalah": "deskripsi masalah 1",
+        "deskripsi_penyelesaian": "deskripsi penyelesaian"
+    },
+    {
+        "judul_pekerjaan": "pekerjaan 2",
+        "divisi_id": "1",
+        "jam_mulai": "2024-08-22 12:20:40",
+        "jam_selesai": "2024-08-22 15:20:40",
+        "deskripsi_masalah": "deskripsi masalah 2",
+        "deskripsi_penyelesaian": "deskripsi penyelesaian 2"
+    },
+    {
+        "judul_pekerjaan": "pekerjaan 3",
+        "divisi_id": "1",
+        "jam_mulai": "2024-08-22 12:20:40",
+        "jam_selesai": "2024-08-22 16:20:40",
+        "deskripsi_masalah": "deskripsi masalah 3",
+        "deskripsi_penyelesaian": "deskripsi penyelesaian 3"
+    }
+]
