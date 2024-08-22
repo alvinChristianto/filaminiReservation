@@ -86,7 +86,7 @@ class LaporanKerjaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('judul_pekerjaan')
                     ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('divisi_id'),
+                Tables\Columns\TextColumn::make('divisi.nama'),
 
                 Tables\Columns\TextColumn::make('jam_mulai'),
                 Tables\Columns\TextColumn::make('jam_selesai'),
@@ -132,4 +132,40 @@ class LaporanKerjaResource extends Resource
             'edit' => Pages\EditLaporanKerja::route('/{record}/edit'),
         ];
     }
+    
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'view_all_data',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'view_all_data_laporan_kerja'
+        ];
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        $userRoles = $user->roles; // Get the user's roles collection
+
+        $hasPermission = false; // Flag to track permission status
+
+        foreach ($userRoles as $role) {
+            if ($role->hasPermissionTo('view_all_data_pengajuan')) {
+                $hasPermission = true; // Set flag to true if any role has the permission
+                break; // Exit the loop once permission is found (optimization)
+            }
+        }
+
+        if ($hasPermission) {
+            return parent::getEloquentQuery();
+        } else {
+            return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
+        }
+    }
+
 }
