@@ -20,6 +20,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Rupadana\ApiService\ApiServicePlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Navigation\NavigationGroup;
+use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -86,6 +87,14 @@ class AdminPanelProvider extends PanelProvider
                         'default' => 1,
                         'sm' => 2,
                     ]),
+                FilamentFullCalendarPlugin::make()
+                    ->schedulerLicenseKey(0)
+                    ->selectable()
+                    ->editable()
+                    ->timezone('Asia/Jakarta')
+                    ->locale('id')
+                    ->plugins(['dayGrid', 'timeGrid'])
+                    ->config([])
             ]);
     }
 }
