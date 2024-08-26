@@ -15,6 +15,7 @@ class CalendarWidget extends FullCalendarWidget
 {
     public Model | string | null $model = LaporanKerja::class;
 
+
     public function getFormSchema(): array
     {
         return [
@@ -49,19 +50,29 @@ class CalendarWidget extends FullCalendarWidget
         // You can use $fetchInfo to filter events by date.
         // This method should return an array of event-like objects. See: https://github.com/saade/filament-fullcalendar/blob/3.x/#returning-events
         // You can also return an array of EventData objects. See: https://github.com/saade/filament-fullcalendar/blob/3.x/#the-eventdata-class
-        return LaporanKerja::query()
+
+        $result =  LaporanKerja::query()
+            ->join('divisis', 'laporan_kerjas.divisi_id', '=', 'divisis.id')
+            ->where('divisi_id', '1')
             ->where('jam_mulai', '>=', $fetchInfo['start'])
             ->where('jam_selesai', '<=', $fetchInfo['end'])
+            ->select('laporan_kerjas.id','laporan_kerjas.jam_mulai','laporan_kerjas.jam_selesai', 'divisis.nama', 'laporan_kerjas.judul_pekerjaan')
             ->get()
             ->map(
                 fn(LaporanKerja $event) => [
                     'id' => $event->id,
-                    'title' => $event->judul_pekerjaan,
+                    'title' => strval($event->nama) ." | ". $event->judul_pekerjaan,
                     'start' => $event->jam_mulai,
                     'end' => $event->jam_selesai,
-                    'shouldOpenUrlInNewTab' => true
+                    'color' => '#bef264',
+                    'textColor' => '#020617',
+                    'borderColor' => '#020617',
+                    'shouldOpenUrlInNewTab' => true,
+                    'url' => LaporanKerjaResource::getUrl(name: 'edit', parameters: ['record' => $event]),
+                    // 'url' => $event->id
                 ]
             )
             ->all();
+        return $result;
     }
 }
