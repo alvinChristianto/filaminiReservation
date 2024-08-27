@@ -14,4 +14,8 @@ class Bank extends Model
     {
         return $this->hasMany(Pengajuan::class);
     }
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

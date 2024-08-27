@@ -128,7 +128,7 @@ class ReservationResource extends Resource
                             ->reactive()
                             ->requiredWith('check_out_time', 'duration')
                             ->afterStateUpdated(
-                                fn ($state, callable $set) => $state ? $set('check_in_time', null) : $set('check_in_time', 'hidden')
+                                fn($state, callable $set) => $state ? $set('check_in_time', null) : $set('check_in_time', 'hidden')
                             ),
                         DateTimePicker::make('check_in_time')
                             ->seconds(false)
@@ -138,7 +138,7 @@ class ReservationResource extends Resource
                             ->seconds(false)
                             ->requiredWith('is_hour_reservation')
                             ->disabled(
-                                fn ($get): bool => $get('is_hour_reservation') == true
+                                fn($get): bool => $get('is_hour_reservation') == true
                             )
                             ->timezone('Asia/Jakarta')
                             ->dehydrated(false)
@@ -154,15 +154,15 @@ class ReservationResource extends Resource
                                         Log::info($outTime);
                                         $durationHours =  calculateDuration($inTime, $outTime);
 
-                                        $set('duration', $durationHours);
+                                        $set('durations', $durationHours);
                                     })
                             ),
                         //->required(),
-                        Forms\Components\TextInput::make('duration')
+                        Forms\Components\TextInput::make('durations')
                             ->label('Duration (Hour)') // Add a descriptive label
                             ->requiredWith('is_hour_reservation')
                             ->disabled(
-                                fn ($get): bool => $get('is_hour_reservation') == false
+                                fn($get): bool => $get('is_hour_reservation') == false
                             )
                             ->dehydrated(false)
                             ->reactive()
@@ -204,12 +204,26 @@ class ReservationResource extends Resource
                                 '1' => '1',
                                 '2' => '2',
                                 '3' => '3',
+                                '4' => '4',
+                                '5' => '5',
                             ]),
                         // ->required(),
-                        Forms\Components\TextInput::make('price')
+                        Forms\Components\TextInput::make('price_per_room')
                             ->numeric()
                             ->prefix('Rp')
-                            ->maxValue(42949672.95),
+                            ->maxValue(42949672.95)
+                            ->reactive()
+                            ->suffixAction(
+                                Action::make('copyCostToPrice')
+                                    ->icon('heroicon-m-calculator')
+                                    ->action(function (Set $set, Get $get, $state) {
+                                        $count = $get('room_count');
+                                        $initPrice = $state;
+
+                                        $tot =  $initPrice * $count;
+                                        $set('price_total', $tot);
+                                    })
+                            ),
 
                         Forms\Components\Textarea::make('notes')
                             // ->required()
@@ -217,23 +231,24 @@ class ReservationResource extends Resource
                             ->cols(5),
                     ]),
 
-                    Fieldset::make('Data Pembayaran')
+                Fieldset::make('Data Pembayaran')
                     ->schema([
-                       
-                        Forms\Components\TextInput::make('price')
+
+                        Forms\Components\TextInput::make('price_total')
                             ->numeric()
                             ->prefix('Rp')
-                            ->maxValue(42949672.95),
+                            ->maxValue(42949672.95)
+                            ,
 
-                        Forms\Components\Select::make('bank_id')
+                        Forms\Components\Select::make('id_bank')
                             ->relationship('bank', 'nama_bank')
                             ->required(),
-                        Forms\Components\TextInput::make('nama_pemilik_rekening')
+                        Forms\Components\TextInput::make('owner_rekening')
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('nomor_rekening')
+                        Forms\Components\TextInput::make('rekening_number')
                             ->maxLength(255),
-                        
-                        
+
+
                     ]),
                 //setactive and will show another form
                 // Forms\Components\Checkbox::make('is_company')
@@ -278,12 +293,14 @@ class ReservationResource extends Resource
                         'PAID' => 'PAID',
                     ]),
             ])
+            ->defaultSort('created_at', 'desc')
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

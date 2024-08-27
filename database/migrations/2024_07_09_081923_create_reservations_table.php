@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('id');
             // $table->string('token_reservation');
             $table->foreignId('id_room')->constrained('room_types')->cascadeOnDelete();
+            $table->foreignId('id_bank')->constrained('banks')->cascadeOnDelete();
             $table->enum('type_reservation', ['RESERVATION', 'OTA', 'WALKIN'])->nullable();
             $table->enum('payment_status', ['UNPAID', 'UNPAID_BOOKED', 'PAID', 'EXPIRED']);
             $table->string('first_name')->nullable();
@@ -28,7 +29,10 @@ return new class extends Migration
             $table->dateTime('check_out_time')->nullable();
             $table->integer('durations')->nullable();
             $table->integer('room_count')->nullable();
-            $table->unsignedInteger('price')->nullable();
+            $table->unsignedInteger('price_per_room')->nullable();
+            $table->unsignedInteger('price_total')->nullable();
+            $table->string('owner_rekening')->nullable();
+            $table->string('rekening_number')->nullable();
             
             $table->text('notes')->nullable();
             $table->timestamps();
