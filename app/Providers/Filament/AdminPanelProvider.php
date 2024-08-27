@@ -94,7 +94,9 @@ class AdminPanelProvider extends PanelProvider
                     ->timezone('Asia/Jakarta')
                     ->locale('id')
                     ->plugins(['dayGrid', 'timeGrid'])
-                    ->config([])
+                    ->config([
+                        'moreLinkClick' => 'day',
+                    ])
             ]);
     }
 }

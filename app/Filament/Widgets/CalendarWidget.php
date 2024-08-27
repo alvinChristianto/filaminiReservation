@@ -5,7 +5,13 @@ namespace App\Filament\Widgets;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 use App\Filament\Resources\EventResource;
 use App\Filament\Resources\LaporanKerjaResource;
+use App\Models\Divisi;
 use App\Models\LaporanKerja;
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Grid;
@@ -15,6 +21,25 @@ class CalendarWidget extends FullCalendarWidget
 {
     public Model | string | null $model = LaporanKerja::class;
 
+    // protected function headerActions(): array
+    // {
+    //     return [
+    //         CreateAction::make(),
+    //     ];
+    // }
+
+    // protected function modalActions(): array
+    // {
+    //     return [
+    //         // EditAction::make(),
+    //         // DeleteAction::make(),
+    //     ];
+    // }
+
+    // protected function viewAction(): Action
+    // {
+    //     return ViewAction::make();
+    // }
 
     public function getFormSchema(): array
     {
@@ -53,18 +78,18 @@ class CalendarWidget extends FullCalendarWidget
 
         $result =  LaporanKerja::query()
             ->join('divisis', 'laporan_kerjas.divisi_id', '=', 'divisis.id')
-            ->where('divisi_id', '1')
+            // ->where('divisi_id', '1')
             ->where('jam_mulai', '>=', $fetchInfo['start'])
             ->where('jam_selesai', '<=', $fetchInfo['end'])
-            ->select('laporan_kerjas.id','laporan_kerjas.jam_mulai','laporan_kerjas.jam_selesai', 'divisis.nama', 'laporan_kerjas.judul_pekerjaan')
+            ->select('laporan_kerjas.id', 'laporan_kerjas.jam_mulai', 'laporan_kerjas.jam_selesai', 'laporan_kerjas.divisi_id','divisis.nama','divisis.color', 'laporan_kerjas.judul_pekerjaan')
             ->get()
             ->map(
                 fn(LaporanKerja $event) => [
                     'id' => $event->id,
-                    'title' => strval($event->nama) ." | ". $event->judul_pekerjaan,
+                    'title' => strval($event->divisi_id) . " | " . $event->judul_pekerjaan,
                     'start' => $event->jam_mulai,
                     'end' => $event->jam_selesai,
-                    'color' => '#bef264',
+                    'color' => $event->color,
                     'textColor' => '#020617',
                     'borderColor' => '#020617',
                     'shouldOpenUrlInNewTab' => true,
@@ -74,5 +99,15 @@ class CalendarWidget extends FullCalendarWidget
             )
             ->all();
         return $result;
+    }
+
+    public function eventDidMount(): string
+    {
+        return <<<JS
+        function({ event, timeText, isStart, isEnd, isMirror, isPast, isFuture, isToday, el, view }){
+            el.setAttribute("x-tooltip", "tooltip");
+            el.setAttribute("x-data", "{ tooltip: '"+event.title+"' }");
+        }
+    JS;
     }
 }

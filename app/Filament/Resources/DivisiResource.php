@@ -6,6 +6,7 @@ use App\Filament\Resources\DivisiResource\Pages;
 use App\Filament\Resources\DivisiResource\RelationManagers;
 use App\Models\Divisi;
 use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,6 +29,7 @@ class DivisiResource extends Resource
 
                 Forms\Components\TextInput::make('nama')
                     ->maxLength(255),
+                ColorPicker::make('color'),
                 Forms\Components\Select::make('tipe')
                     ->options([
                         'HO' => 'HO',
@@ -42,6 +44,7 @@ class DivisiResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama'),
+                Tables\Columns\ColorColumn::make('color'),
                 Tables\Columns\TextColumn::make('tipe'),
             ])
             ->filters([
