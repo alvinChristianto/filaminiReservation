@@ -7,6 +7,7 @@ use App\Filament\Resources\RoomResource\RelationManagers;
 use App\Models\Room;
 use App\Models\RoomType;
 use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -30,7 +31,7 @@ class RoomTypesResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-
+                ColorPicker::make('color'),
                 Forms\Components\Select::make('quantity')
                     ->options([
                         '1' => '1',
@@ -68,6 +69,7 @@ class RoomTypesResource extends Resource
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\ColorColumn::make('color'),
                 Tables\Columns\TextColumn::make('status')
             ])
             ->filters([
