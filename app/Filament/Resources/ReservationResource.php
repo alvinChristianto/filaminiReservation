@@ -141,7 +141,7 @@ class ReservationResource extends Resource
                                 fn($get): bool => $get('is_hour_reservation') == true
                             )
                             ->timezone('Asia/Jakarta')
-                            ->dehydrated(false)
+                            ->dehydrated(true)
                             ->reactive()
                             ->suffixAction(
                                 Action::make('copyCostToPrice')
@@ -164,7 +164,7 @@ class ReservationResource extends Resource
                             ->disabled(
                                 fn($get): bool => $get('is_hour_reservation') == false
                             )
-                            ->dehydrated(false)
+                            ->dehydrated(true)
                             ->reactive()
                             ->suffixAction(
                                 Action::make('copyCostToPrice')

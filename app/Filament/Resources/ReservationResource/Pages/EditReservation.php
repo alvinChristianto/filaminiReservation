@@ -16,7 +16,7 @@ class EditReservation extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            // Actions\DeleteAction::make(),
             // Actions\Action::make('updateAuthor')
             //     ->form([
             //         Select::make('authorId')
