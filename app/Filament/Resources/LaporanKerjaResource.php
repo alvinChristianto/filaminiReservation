@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\LaporanKerjaResource\Pages;
 use App\Filament\Resources\LaporanKerjaResource\RelationManagers;
 use App\Models\LaporanKerja;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
-class LaporanKerjaResource extends Resource
+class LaporanKerjaResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = LaporanKerja::class;
 
@@ -29,6 +30,7 @@ class LaporanKerjaResource extends Resource
 
     protected static ?string $navigationGroup = 'Laporan Kerja';
     protected static ?string $navigationLabel = 'Laporan Kerja';
+    protected static ?string $modelLabel = 'Laporan Kerja';
 
     public static function form(Form $form): Form
     {
@@ -88,6 +90,8 @@ class LaporanKerjaResource extends Resource
                 Tables\Columns\TextColumn::make('judul_pekerjaan')
                     ->limit(15)
                     ->searchable(isIndividual: true),
+                    
+                Tables\Columns\TextColumn::make('user.name'),
                 Tables\Columns\TextColumn::make('divisi.nama')
                     ->sortable('desc'),
 
@@ -124,7 +128,7 @@ class LaporanKerjaResource extends Resource
             ])
             ->groups([
                 Group::make('divisi.nama')
-                    ->orderQueryUsing(fn(Builder $query, string $direction) => $query->orderBy('created_at', 'asc')),
+                    ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('created_at', 'asc')),
             ]);
     }
 
@@ -154,20 +158,19 @@ class LaporanKerjaResource extends Resource
             'update',
             'delete',
             'delete_any',
-            'view_all_data_laporan_kerja'
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
-
+        
         $userRoles = $user->roles; // Get the user's roles collection
 
         $hasPermission = false; // Flag to track permission status
 
         foreach ($userRoles as $role) {
-            if ($role->hasPermissionTo('view_all_data_pengajuan')) {
+            if ($role->hasPermissionTo('view_all_data_laporan::kerja')) {
                 $hasPermission = true; // Set flag to true if any role has the permission
                 break; // Exit the loop once permission is found (optimization)
             }

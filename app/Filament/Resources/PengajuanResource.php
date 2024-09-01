@@ -240,11 +240,11 @@ class PengajuanResource extends Resource implements HasShieldPermissions
                 break; // Exit the loop once permission is found (optimization)
             }
         }
-
+        // dd($hasPermission);
         if ($hasPermission) {
             return parent::getEloquentQuery();
         } else {
-            return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
+            return parent::getEloquentQuery()->where('id', auth()->user()->id);
         }
     }
 }

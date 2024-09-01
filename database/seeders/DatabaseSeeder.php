@@ -45,23 +45,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'lorem ipsum',
         ]);
 
-        Divisi::factory()->create([
-            'nama' => 'Head Office',
-            'tipe' => 'HO',
-        ]);
-        Divisi::factory()->create([
-            'nama' => 'Finance',
-            'tipe' => 'HO',
-        ]);
-        Divisi::factory()->create([
-            'nama' => 'The Cabin Hotel Sutomo',
-            'tipe' => 'HOTEL',
-        ]);
-        Divisi::factory()->create([
-            'nama' => 'The Cabin Hotel Gandekan',
-            'tipe' => 'HOTEL',
-        ]);
-
+       
         TipePengajuan::factory()->create([
             'nama_tipe' => 'RAB',
         ]);

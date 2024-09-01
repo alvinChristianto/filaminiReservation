@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('divisis', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('color');
+            $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
+            $table->string('color')->nullable();
             $table->enum('tipe', ['HO', 'HOTEL']);
 
             $table->timestamps();

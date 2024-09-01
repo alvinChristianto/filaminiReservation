@@ -63,7 +63,7 @@ class LaporanKerjaPolicy
      */
     public function forceDelete(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('force_delete_laporan::kerja');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -71,7 +71,7 @@ class LaporanKerjaPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_laporan::kerja');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -79,7 +79,7 @@ class LaporanKerjaPolicy
      */
     public function restore(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('restore_laporan::kerja');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -87,7 +87,7 @@ class LaporanKerjaPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_laporan::kerja');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -95,7 +95,7 @@ class LaporanKerjaPolicy
      */
     public function replicate(User $user, LaporanKerja $laporanKerja): bool
     {
-        return $user->can('replicate_laporan::kerja');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class LaporanKerjaPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_laporan::kerja');
+        return $user->can('{{ Reorder }}');
     }
 }

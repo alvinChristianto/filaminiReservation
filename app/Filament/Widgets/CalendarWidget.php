@@ -19,6 +19,7 @@ use Filament\Forms\Components\DateTimePicker;
 
 class CalendarWidget extends FullCalendarWidget
 {
+    protected static bool $isDiscovered = false;    //show widget on dashboard home , set true or just remove it
     public Model | string | null $model = LaporanKerja::class;
 
     // protected function headerActions(): array
@@ -60,7 +61,7 @@ class CalendarWidget extends FullCalendarWidget
         return [
             'firstDay' => 1,
             'headerToolbar' => [
-                'left' => 'timeGridWeek, dayGridMonth, dayGridWeek,dayGridDay',
+                'left' => 'dayGridMonth,timeGridWeek,dayGridDay',
                 'center' => 'title',
                 'right' => 'prev,next today',
             ],
@@ -72,19 +73,27 @@ class CalendarWidget extends FullCalendarWidget
      */
     public function fetchEvents(array $fetchInfo): array
     {
+        $resCheck = $this->checkUserStatus();
+        // dd($resCheck);
+        $permission = $resCheck['permission'];
+        $userid = $resCheck['userid'];
+        // dd($userid);
         // You can use $fetchInfo to filter events by date.
         // This method should return an array of event-like objects. See: https://github.com/saade/filament-fullcalendar/blob/3.x/#returning-events
         // You can also return an array of EventData objects. See: https://github.com/saade/filament-fullcalendar/blob/3.x/#the-eventdata-class
 
         $result =  LaporanKerja::query()
             ->join('divisis', 'laporan_kerjas.divisi_id', '=', 'divisis.id')
-            // ->where('divisi_id', '1')
+            ->when(!$permission, function ($query) use ($userid) {
+                $query->where('user_id', $userid);
+            })
+            
             ->where('jam_mulai', '>=', $fetchInfo['start'])
             ->where('jam_selesai', '<=', $fetchInfo['end'])
-            ->select('laporan_kerjas.id', 'laporan_kerjas.jam_mulai', 'laporan_kerjas.jam_selesai', 'laporan_kerjas.divisi_id','divisis.nama','divisis.color', 'laporan_kerjas.judul_pekerjaan')
+            ->select('laporan_kerjas.id', 'laporan_kerjas.jam_mulai', 'laporan_kerjas.jam_selesai', 'laporan_kerjas.divisi_id', 'divisis.nama', 'divisis.color', 'laporan_kerjas.judul_pekerjaan')
             ->get()
             ->map(
-                fn(LaporanKerja $event) => [
+                fn (LaporanKerja $event) => [
                     'id' => $event->id,
                     'title' => strval($event->divisi_id) . " | " . $event->judul_pekerjaan,
                     'start' => $event->jam_mulai,
@@ -101,6 +110,25 @@ class CalendarWidget extends FullCalendarWidget
         return $result;
     }
 
+    protected function checkUserStatus()
+    {
+        $user = auth()->user();
+        $userId = auth()->user()->id;
+
+        $userRoles = $user->roles; // Get the user's roles collection
+        foreach ($userRoles as $role) {
+            if ($role->hasPermissionTo('view_all_data_laporan::kerja')) {
+                // return [true, $userId];
+                $arr = array("permission" => true ,"userid" => $userId );
+                return $arr;
+            }
+        }
+
+        $arr = array("permission" => false ,"userid" => $userId );
+        return $arr;
+
+
+    }
     public function eventDidMount(): string
     {
         return <<<JS

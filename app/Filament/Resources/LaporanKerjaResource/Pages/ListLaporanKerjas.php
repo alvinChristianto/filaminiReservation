@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\LaporanKerjaResource\Pages;
 
 use App\Filament\Resources\LaporanKerjaResource;
+use App\Filament\Widgets\CalendarWidget;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -14,6 +15,14 @@ class ListLaporanKerjas extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+    
+    protected function getFooterWidgets(): array
+    {
+        return [
+            CalendarWidget::class,
+            
         ];
     }
 }
