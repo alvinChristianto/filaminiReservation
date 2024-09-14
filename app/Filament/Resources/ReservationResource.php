@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Get;
 use Illuminate\Support\Facades\Log;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class ReservationResource extends Resource
 {
@@ -300,7 +303,19 @@ class ReservationResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()->withColumns([
+                            Column::make('id'),
+                            Column::make('type_reservation'),
+                            Column::make('first_name'),
+                            Column::make('last_name'),
+                            Column::make('check_in_time'),
+                            Column::make('check_out_time'),
+                            Column::make('durations'),
+                            Column::make('price_total'),
+                            Column::make('notes'),
+                        ]),
+                    ]),
                 ]),
             ]);
     }
