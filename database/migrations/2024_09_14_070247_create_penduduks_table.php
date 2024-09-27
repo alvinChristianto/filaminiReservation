@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('penduduks', function (Blueprint $table) {
             $table->id();
             $table->string('no_ktp')->nullable();
+            $table->foreignId('keluarga_id')->constrained('keluargas')->cascadeOnDelete();
             $table->string('name');
             $table->enum('gender', ['L', 'P']);
             $table->string('place_birth');

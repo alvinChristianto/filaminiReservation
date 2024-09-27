@@ -14,15 +14,13 @@ return new class extends Migration
         Schema::create('keluargas', function (Blueprint $table) {
             $table->id();
             $table->string('no_kk');
-            $table->foreignId('id_head')->constrained('penduduks')->cascadeOnDelete();
-            $table->string('rt')->nullable();
-            $table->string('rw')->nullable();
+            $table->string('rt');
+            $table->string('rw');
             $table->string('kelurahan');
             $table->string('kecamatan');
             $table->string('kabupaten');
             $table->string('provinsi');
             $table->string('address');
-            $table->foreignId('member')->constrained('penduduks')->cascadeOnDelete();
             $table->string('image_keluarga')->nullable();
             $table->timestamps();
         });

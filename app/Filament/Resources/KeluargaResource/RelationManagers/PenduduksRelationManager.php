@@ -1,40 +1,30 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\KeluargaResource\RelationManagers;
 
-use App\Filament\Resources\PendudukResource\Pages;
-use App\Filament\Resources\PendudukResource\RelationManagers;
-use App\Models\Penduduk;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
-use pxlrbt\FilamentExcel\Columns\Column;
-use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
-class PendudukResource extends Resource
+class PenduduksRelationManager extends RelationManager
 {
-    protected static ?string $model = Penduduk::class;
+    protected static string $relationship = 'penduduk';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('no_ktp')
                     ->maxLength(100)
-                    ->columnSpan('full')
-                    ->required(),
+                    ->columnSpan('full'),
                 Forms\Components\TextInput::make('name')
-                    ->maxLength(255)
-                    ->required(),
+                    ->maxLength(255),
                 Forms\Components\Select::make('gender')
                     ->options([
                         'L' => 'Laki-laki',
@@ -43,12 +33,11 @@ class PendudukResource extends Resource
                     ->required(),
 
                 Forms\Components\TextInput::make('place_birth')
-                    ->maxLength(255)
-                    ->required(),
+                    ->maxLength(255),
                 DateTimePicker::make('date_birth')
                     ->seconds(false)
                     ->maxDate(now())
-                    ->timezone('Asia/Jakarta')->required(),
+                    ->timezone('Asia/Jakarta'),
 
                 Forms\Components\Textarea::make('address1')
                     ->rows(5)
@@ -104,67 +93,27 @@ class PendudukResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('no_ktp')
             ->columns([
-                Tables\Columns\TextColumn::make('no_ktp')
-                    ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('keluarga.no_kk')
-                    ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('gender')
-                    ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('rt')
-                    ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('rw')
-                    ->searchable(isIndividual: true),
+                Tables\Columns\TextColumn::make('no_ktp'),
             ])
             ->filters([
                 //
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    ExportBulkAction::make()->exports([
-                        ExcelExport::make()->withColumns([
-                            Column::make('no_ktp'),
-                            Column::make('keluarga_id'),
-                            Column::make('name'),
-                            Column::make('gender'),
-                            Column::make('place_birth'),
-                            Column::make('date_birth'),
-                            Column::make('address1'),
-                            Column::make('address2'),
-                            Column::make('rt'),
-                            Column::make('rw'),
-                            Column::make('working_status'),
-                            Column::make('marriage_status'),
-                            Column::make('image_penduduk'),
-                        ]),
-                    ]),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListPenduduks::route('/'),
-            'create' => Pages\CreatePenduduk::route('/create'),
-            'edit' => Pages\EditPenduduk::route('/{record}/edit'),
-        ];
     }
 }

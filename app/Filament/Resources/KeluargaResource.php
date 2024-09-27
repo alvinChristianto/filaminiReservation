@@ -6,12 +6,16 @@ use App\Filament\Resources\KeluargaResource\Pages;
 use App\Filament\Resources\KeluargaResource\RelationManagers;
 use App\Models\Keluarga;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class KeluargaResource extends Resource
 {
@@ -25,9 +29,7 @@ class KeluargaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('no_kk')
                     ->maxLength(100)
-                    ->columnSpan('full'),
-                Forms\Components\Select::make('id_head')
-                    ->relationship('Penduduk', 'name')
+                    ->columnSpan('full')
                     ->required(),
                 Forms\Components\Select::make('rt')
                     ->options([
@@ -45,19 +47,29 @@ class KeluargaResource extends Resource
                     ->required(),
 
                 Forms\Components\TextInput::make('kelurahan')
-                    ->maxLength(100),
+                    ->maxLength(100)
+                    ->required(),
 
                 Forms\Components\TextInput::make('kecamatan')
-                    ->maxLength(100),
+                    ->maxLength(100)
+                    ->required(),
                 Forms\Components\TextInput::make('kabupaten')
-                    ->maxLength(100),
+                    ->maxLength(100)
+                    ->required(),
                 Forms\Components\TextInput::make('provinsi')
-                    ->maxLength(100),
+                    ->maxLength(100)
+                    ->required(),
 
                 Forms\Components\Textarea::make('address')
                     ->rows(5)
                     ->cols(5)
-                    ->columnSpan('full'),
+                    ->columnSpan('full')
+                    ->required(),
+                FileUpload::make('image_keluarga')
+                    ->image()
+                    ->directory('keluarga-attachments')
+                    ->deletable(false)
+                    ->openable(),
             ]);
     }
 
@@ -65,17 +77,36 @@ class KeluargaResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('no_kk')
+                    ->searchable(isIndividual: true),
+                Tables\Columns\TextColumn::make('rt')
+                    ->searchable(isIndividual: true),
+                Tables\Columns\TextColumn::make('rw')
+                    ->searchable(isIndividual: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()->withColumns([
+                            Column::make('no_kk'),
+                            Column::make('rt'),
+                            Column::make('rw'),
+                            Column::make('kelurahan'),
+                            Column::make('kecamatan'),
+                            Column::make('kabupaten'),
+                            Column::make('provinsi'),
+                            Column::make('address'),
+                            Column::make('image_keluarga'),
+                        ]),
+                    ]),
                 ]),
             ]);
     }
@@ -83,7 +114,7 @@ class KeluargaResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\PenduduksRelationManager::class,
         ];
     }
 
