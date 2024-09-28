@@ -30,7 +30,11 @@ class PendudukResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('no_ktp')
                     ->maxLength(100)
-                    ->columnSpan('full')
+                    ->required(),
+                Forms\Components\Select::make('keluarga_id')
+                    ->relationship('keluarga', 'no_kk')
+                    ->searchable()
+                    ->preload()
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->maxLength(255)
