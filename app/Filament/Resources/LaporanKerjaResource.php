@@ -46,8 +46,14 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             ->relationship('divisi', 'nama')
                             ->searchable()
                             ->preload()
-                            ->required()
-                            ->columnSpan('full'),
+                            ->required(),
+                        Forms\Components\Select::make('tipe_laporan')
+                            ->label('Tipe Laporan')
+                            ->options([
+                                'Head Office' => 'Head Office',
+                                'Kunjungan Cabang' => 'Kunjungan Cabang',
+                            ])
+                            ->required(),
 
                     ]),
                 Fieldset::make('Deskripsi')
@@ -90,8 +96,9 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('judul_pekerjaan')
                     ->limit(15)
                     ->searchable(isIndividual: true),
-                    
+
                 Tables\Columns\TextColumn::make('user.name'),
+                Tables\Columns\TextColumn::make('tipe_laporan'),
                 Tables\Columns\TextColumn::make('divisi.nama')
                     ->sortable('desc'),
 
@@ -116,6 +123,7 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                     ExportBulkAction::make()->exports([
                         ExcelExport::make()->withColumns([
                             Column::make('judul_pekerjaan'),
+                            Column::make('tipe_laporan'),
                             Column::make('divisi.nama'),
                             Column::make('jam_mulai'),
                             Column::make('jam_selesai'),
@@ -164,7 +172,7 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
     public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
-        
+
         $userRoles = $user->roles; // Get the user's roles collection
 
         $hasPermission = false; // Flag to track permission status

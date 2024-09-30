@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('judul_pekerjaan')->nullable();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('divisi_id')->constrained('divisis')->cascadeOnDelete();
+            $table->enum('tipe_laporan', ['Head Office', 'Kunjungan Cabang']);
             $table->dateTime('jam_mulai')->nullable();
             $table->dateTime('jam_selesai')->nullable();
             $table->text('deskripsi_masalah')->nullable();
