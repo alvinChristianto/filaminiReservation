@@ -21,7 +21,10 @@ return new class extends Migration
             $table->string('kabupaten');
             $table->string('provinsi');
             $table->string('address');
-            $table->string('image_keluarga')->nullable();
+            $table->string('image_kartu_keluarga')->nullable();
+            $table->string('image_kartu_nikah')->nullable();
+            $table->string('image_buku_nikah')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

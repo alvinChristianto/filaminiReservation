@@ -22,10 +22,17 @@ class PenduduksRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('no_ktp')
                     ->maxLength(100)
-                    ->columnSpan('full'),
+                    ->required(),
+                Forms\Components\Select::make('keluarga_id')
+                    ->relationship('keluarga', 'no_kk')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Forms\Components\TextInput::make('name')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->required(),
                 Forms\Components\Select::make('gender')
+                    ->label('Jenis Kelamin ')
                     ->options([
                         'L' => 'Laki-laki',
                         'P' => 'Perempuan',
@@ -33,21 +40,27 @@ class PenduduksRelationManager extends RelationManager
                     ->required(),
 
                 Forms\Components\TextInput::make('place_birth')
-                    ->maxLength(255),
+                    ->label('Tempat Lahir ')
+                    ->maxLength(255)
+                    ->required(),
                 DateTimePicker::make('date_birth')
+                    ->label('Tanggal Lahir ')
                     ->seconds(false)
                     ->maxDate(now())
-                    ->timezone('Asia/Jakarta'),
+                    ->timezone('Asia/Jakarta')->required(),
 
                 Forms\Components\Textarea::make('address1')
+                    ->label('Alamat ke-1 ')
                     ->rows(5)
                     ->cols(5)
                     ->required(),
 
                 Forms\Components\Textarea::make('address2')
+                    ->label('Alamat ke-2')
                     ->rows(5)
                     ->cols(5),
                 Forms\Components\Select::make('rt')
+                    ->label('RT')
                     ->options([
                         '1' => '1',
                         '2' => '2',
@@ -56,12 +69,14 @@ class PenduduksRelationManager extends RelationManager
                     ])
                     ->required(),
                 Forms\Components\Select::make('rw')
+                    ->label('RW')
                     ->options([
                         '1' => '1',
                         '2' => '2',
                     ])
                     ->required(),
                 Forms\Components\Select::make('working_status')
+                    ->label('status pekerjaan')
                     ->options([
                         'Belum Bekerja' => 'Belum Bekerja',
                         'Petani' => 'Petani',
@@ -74,6 +89,7 @@ class PenduduksRelationManager extends RelationManager
                     ])
                     ->required(),
                 Forms\Components\Select::make('marriage_status')
+                    ->label('status pernikahan')
                     ->options([
                         'Lajang' => 'Lajang',
                         'Menikah' => 'Menikah',
@@ -82,14 +98,32 @@ class PenduduksRelationManager extends RelationManager
                         'Belum Diketahui' => 'Belum Diketahui'
                     ])
                     ->required(),
-                FileUpload::make('image_penduduk')
+                FileUpload::make('image_wajah')
                     ->image()
                     ->directory('penduduk-attachments')
                     ->deletable(false)
                     ->openable(),
+                FileUpload::make('image_kartu_identitas')
+                    ->image()
+                    ->directory('kartuidentitas-attachments')
+                    ->deletable(false)
+                    ->openable(),
+                FileUpload::make('image_akta_kelahiran')
+                    ->image()
+                    ->directory('aktalahir-attachments')
+                    ->deletable(false)
+                    ->openable(),
+
+                FileUpload::make('image_ijasah')
+                    ->image()
+                    ->directory('ijasah-attachments')
+                    ->deletable(false)
+                    ->openable(),
                 Forms\Components\Textarea::make('notes')
+                    ->label('Catatan untuk penduduk')
                     ->rows(5)
-                    ->cols(5),
+                    ->cols(5)
+                    ->columnSpan('full'),
             ]);
     }
 
@@ -99,6 +133,9 @@ class PenduduksRelationManager extends RelationManager
             ->recordTitleAttribute('no_ktp')
             ->columns([
                 Tables\Columns\TextColumn::make('no_ktp'),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('place_birth'),
+                Tables\Columns\TextColumn::make('date_birth'),
             ])
             ->filters([
                 //

@@ -40,6 +40,7 @@ class PendudukResource extends Resource
                     ->maxLength(255)
                     ->required(),
                 Forms\Components\Select::make('gender')
+                ->label('Jenis Kelamin ')
                     ->options([
                         'L' => 'Laki-laki',
                         'P' => 'Perempuan',
@@ -47,22 +48,27 @@ class PendudukResource extends Resource
                     ->required(),
 
                 Forms\Components\TextInput::make('place_birth')
+                ->label('Tempat Lahir ')
                     ->maxLength(255)
                     ->required(),
                 DateTimePicker::make('date_birth')
+                ->label('Tanggal Lahir ')
                     ->seconds(false)
                     ->maxDate(now())
                     ->timezone('Asia/Jakarta')->required(),
 
                 Forms\Components\Textarea::make('address1')
+                ->label('Alamat ke-1 ')
                     ->rows(5)
                     ->cols(5)
                     ->required(),
 
                 Forms\Components\Textarea::make('address2')
+                ->label('Alamat ke-2')
                     ->rows(5)
                     ->cols(5),
                 Forms\Components\Select::make('rt')
+                ->label('RT')
                     ->options([
                         '1' => '1',
                         '2' => '2',
@@ -71,12 +77,14 @@ class PendudukResource extends Resource
                     ])
                     ->required(),
                 Forms\Components\Select::make('rw')
+                ->label('RW')
                     ->options([
                         '1' => '1',
                         '2' => '2',
                     ])
                     ->required(),
                 Forms\Components\Select::make('working_status')
+                ->label('status pekerjaan')
                     ->options([
                         'Belum Bekerja' => 'Belum Bekerja',
                         'Petani' => 'Petani',
@@ -89,6 +97,7 @@ class PendudukResource extends Resource
                     ])
                     ->required(),
                 Forms\Components\Select::make('marriage_status')
+                ->label('status pernikahan')
                     ->options([
                         'Lajang' => 'Lajang',
                         'Menikah' => 'Menikah',
@@ -97,14 +106,32 @@ class PendudukResource extends Resource
                         'Belum Diketahui' => 'Belum Diketahui'
                     ])
                     ->required(),
-                FileUpload::make('image_penduduk')
+                FileUpload::make('image_wajah')
                     ->image()
                     ->directory('penduduk-attachments')
                     ->deletable(false)
                     ->openable(),
+                FileUpload::make('image_kartu_identitas')
+                    ->image()
+                    ->directory('kartuidentitas-attachments')
+                    ->deletable(false)
+                    ->openable(),
+                FileUpload::make('image_akta_kelahiran')
+                    ->image()
+                    ->directory('aktalahir-attachments')
+                    ->deletable(false)
+                    ->openable(),
+
+                FileUpload::make('image_ijasah')
+                    ->image()
+                    ->directory('ijasah-attachments')
+                    ->deletable(false)
+                    ->openable(),
                 Forms\Components\Textarea::make('notes')
+                ->label('Catatan untuk penduduk')
                     ->rows(5)
-                    ->cols(5),
+                    ->cols(5)
+                    ->columnSpan('full'),
             ]);
     }
 

@@ -32,6 +32,7 @@ class KeluargaResource extends Resource
                     ->columnSpan('full')
                     ->required(),
                 Forms\Components\Select::make('rt')
+                    ->label('RT ')
                     ->options([
                         '1' => '1',
                         '2' => '2',
@@ -40,6 +41,7 @@ class KeluargaResource extends Resource
                     ])
                     ->required(),
                 Forms\Components\Select::make('rw')
+                    ->label('RW ')
                     ->options([
                         '1' => '1',
                         '2' => '2',
@@ -61,15 +63,31 @@ class KeluargaResource extends Resource
                     ->required(),
 
                 Forms\Components\Textarea::make('address')
-                    ->rows(5)
+                    ->label('Alamat keluarga ')
+                    ->rows(2)
                     ->cols(5)
                     ->columnSpan('full')
                     ->required(),
-                FileUpload::make('image_keluarga')
+                FileUpload::make('image_kartu_keluarga')
                     ->image()
                     ->directory('keluarga-attachments')
                     ->deletable(false)
                     ->openable(),
+                FileUpload::make('image_kartu_nikah')
+                    ->image()
+                    ->directory('kartunikah-attachments')
+                    ->deletable(false)
+                    ->openable(),
+                FileUpload::make('image_buku_nikah')
+                    ->image()
+                    ->directory('bukunikah-attachments')
+                    ->deletable(false)
+                    ->openable(),
+                Forms\Components\Textarea::make('notes')
+                    ->label('Catatan untuk keluarga ')
+                    ->rows(5)
+                    ->cols(5)
+                    ->columnSpan('full'),
             ]);
     }
 

@@ -25,7 +25,10 @@ return new class extends Migration
             $table->enum('rw', ['1', '2']);
             $table->enum('working_status', ['Belum Bekerja', 'Petani','Wirausaha','Sekolah', 'Mahasiswa', 'Pegawai Negeri', 'Pegawai Swasta', 'Pensiunan']);
             $table->enum('marriage_status', ['Lajang', 'Menikah','Cerai Mati','Cerai Hidup', 'Belum Diketahui']);
-            $table->string('image_penduduk')->nullable();
+            $table->string('image_wajah')->nullable();
+            $table->string('image_kartu_identitas')->nullable();
+            $table->string('image_akta_kelahiran')->nullable();
+            $table->string('image_ijasah')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });
