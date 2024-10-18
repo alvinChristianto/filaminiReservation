@@ -4,12 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LaporanKerjaResource\Pages;
 use App\Filament\Resources\LaporanKerjaResource\RelationManagers;
+use App\Models\EngineerItem;
 use App\Models\LaporanKerja;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -32,8 +34,11 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
     protected static ?string $navigationLabel = 'Laporan Kerja';
     protected static ?string $modelLabel = 'Laporan Kerja';
 
+
+
     public static function form(Form $form): Form
     {
+
         return $form
             ->schema([
                 Fieldset::make('Data Pekerjaan')
@@ -56,6 +61,63 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             ->required(),
 
                     ]),
+                Fieldset::make('Data Bahan')
+                    ->schema(
+                        [
+                            Repeater::make('bahan_engineer')
+                                ->schema([
+                                    Forms\Components\Select::make('id bahan')
+                                        ->label('nama bahan')
+                                        ->relationship('engineerItem', 'item_name')
+                                        ->searchable()
+                                        ->preload()
+                                        ->reactive()
+                                        ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                            $product = EngineerItem::find($state);
+                                            // dd($product);
+                                            $base_price = $product->base_price;
+                                            $percent = $product->percent_increase;
+
+                                            $jumlahItem = $get('jumlah');
+
+
+                                            $priceAfterCalc = ($base_price + ($percent / 100 * $base_price)) * $jumlahItem;
+                                            if ($product) {
+                                                $set('harga akhir', $priceAfterCalc);
+                                            }
+                                        })
+
+                                        ->required(),
+
+                                    Forms\Components\TextInput::make('jumlah')
+                                        ->maxLength(255)
+                                        ->required()
+                                        ->reactive()
+                                        ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                            // dd();
+                                            $product = EngineerItem::find($get('id bahan'));
+                                            $base_price = $product->base_price;
+                                            $percent = $product->percent_increase;
+
+
+                                            $priceAfterCalc = ($base_price + ($percent / 100 * $base_price))  * $state;
+                                            if ($product) {
+                                                $set('harga akhir', $priceAfterCalc);
+                                            }
+                                        }),
+                                    Forms\Components\TextInput::make('harga akhir')
+                                        ->maxLength(255)
+                                        ->disabled()
+                                        // jika hidden diaktifkan, maka agung bisa harga akhir, jika dinonaktifkan tidak bisa
+                                        ->hidden(!auth()->user()->hasRole('engineering_spv')),
+
+                                ])
+                                ->columnSpan('full')
+                        ],
+                        Forms\Components\TextInput::make('')
+                            ->maxLength(255)
+                            ->required(),
+                    ),
                 Fieldset::make('Deskripsi')
                     ->schema([
                         DateTimePicker::make('jam_mulai')
@@ -120,6 +182,7 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+
                     ExportBulkAction::make()->exports([
                         ExcelExport::make()->withColumns([
                             Column::make('judul_pekerjaan'),
@@ -127,6 +190,10 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             Column::make('divisi.nama'),
                             Column::make('jam_mulai'),
                             Column::make('jam_selesai'),
+                            Column::make('detail_bahan_engineer'),
+                            // Column::make('bahan_engineer'),
+
+                            //  ->formatStateUsing(fn ($state) => substr($state, strrpos($state[0], ',') + 1)),      //the data with repeater as json data
                             Column::make('deskripsi_masalah'),
                             Column::make('deskripsi_penyelesaian'),
                             Column::make('image_setelah_pekerjaan'),
@@ -138,6 +205,11 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                 Group::make('divisi.nama')
                     ->orderQueryUsing(fn (Builder $query, string $direction) => $query->orderBy('created_at', 'asc')),
             ]);
+    }
+
+    public static function extractLastValue($string) {
+        $parts = explode(',', $string);
+        return end($parts);
     }
 
     public static function getRelations(): array
