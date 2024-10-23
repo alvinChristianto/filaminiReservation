@@ -300,6 +300,10 @@ class ReservationResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('Pdf')
+                    ->icon('heroicon-m-clipboard')
+                    ->url(fn (Reservation $record) => route('reservation.report', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

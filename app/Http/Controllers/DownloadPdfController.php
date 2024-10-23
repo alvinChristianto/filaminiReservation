@@ -45,4 +45,18 @@ class DownloadPdfController extends Controller
         $pdf->loadView('pdf.keluarga_report_pdf', compact('record1', 'record2')); // Pass the variable $record to the blade file
         return $pdf->stream(); // renders the PDF in the browser
     }
+
+    public function reservationReport($id)
+    {
+        // $record = Pengajuan::find($id);
+        $record1 = DB::table('reservations')
+            ->select('reservations.*')
+            ->where('reservations.id', $id)
+            ->first();
+        
+        dd($record1);
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('pdf.reservation_report_pdf', compact('record1')); // Pass the variable $record to the blade file
+        return $pdf->stream(); // renders the PDF in the browser
+    }
 }
