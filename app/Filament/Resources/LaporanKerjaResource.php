@@ -59,6 +59,12 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                                 'Kunjungan Cabang' => 'Kunjungan Cabang',
                             ])
                             ->required(),
+                        DateTimePicker::make('jam_mulai')
+                            ->seconds(false)
+                            ->timezone('Asia/Jakarta'),
+                        DateTimePicker::make('jam_selesai')
+                            ->seconds(false)
+                            ->timezone('Asia/Jakarta'),
 
                     ]),
                 Fieldset::make('Data Bahan')
@@ -118,30 +124,33 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             ->maxLength(255)
                             ->required(),
                     ),
-                Fieldset::make('Deskripsi')
+                Fieldset::make('Detail Pengerjaan')
                     ->schema([
-                        DateTimePicker::make('jam_mulai')
-                            ->seconds(false)
-                            ->timezone('Asia/Jakarta'),
-                        DateTimePicker::make('jam_selesai')
-                            ->seconds(false)
-                            ->timezone('Asia/Jakarta'),
+
                         Forms\Components\Textarea::make('deskripsi_masalah')
+                            ->label('Detail Sebelum Pengerjaan')
                             // ->required()
-                            ->rows(7)
-                            ->columnSpan('full'),
-                        Forms\Components\Textarea::make('deskripsi_penyelesaian')
-                            // ->required()
-                            ->rows(7)
-                            ->columnSpan('full')
-                    ]),
-                Fieldset::make('Lampiran')
-                    ->schema([
+                            ->rows(7),
                         FileUpload::make('image_sebelum_pekerjaan')
                             ->image()
                             ->directory('before-attachments')
                             ->deletable(false)
                             ->openable(),
+
+                        Forms\Components\Textarea::make('deskripsi_progress')
+                            ->label('Detail Progress Pengerjaan')
+                            ->rows(7),
+                        FileUpload::make('image_progress_pekerjaan')
+                            ->image()
+                            ->directory('onprogress-attachments')
+                            ->deletable(false)
+                            ->openable(),
+
+
+                        Forms\Components\Textarea::make('deskripsi_penyelesaian')
+                            ->label('Detail Setelah Pengerjaan')
+                            // ->required()
+                            ->rows(7),
                         FileUpload::make('image_setelah_pekerjaan')
                             ->image()
                             ->directory('after-attachments')
@@ -207,7 +216,8 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
             ]);
     }
 
-    public static function extractLastValue($string) {
+    public static function extractLastValue($string)
+    {
         $parts = explode(',', $string);
         return end($parts);
     }

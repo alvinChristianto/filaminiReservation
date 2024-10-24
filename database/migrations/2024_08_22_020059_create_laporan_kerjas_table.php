@@ -22,8 +22,10 @@ return new class extends Migration
             $table->dateTime('jam_mulai')->nullable();
             $table->dateTime('jam_selesai')->nullable();
             $table->text('deskripsi_masalah')->nullable();
+            $table->text('deskripsi_progress')->nullable();
             $table->text('deskripsi_penyelesaian')->nullable();
             $table->string('image_sebelum_pekerjaan')->nullable();
+            $table->string('image_progress_pekerjaan')->nullable();
             $table->string('image_setelah_pekerjaan')->nullable();
             $table->timestamps();
         });
