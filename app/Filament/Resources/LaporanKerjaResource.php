@@ -12,6 +12,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -41,7 +42,8 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
 
         return $form
             ->schema([
-                Fieldset::make('Data Pekerjaan')
+                Section::make('Data Pekerjaan')
+                    ->description('data awal pekerjaan mulai dari judul pekerjaan, dimana dikerjakan sampai rentang waktu')
                     ->schema([
                         Forms\Components\TextInput::make('judul_pekerjaan')
                             ->maxLength(255)
@@ -66,8 +68,10 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             ->seconds(false)
                             ->timezone('Asia/Jakarta'),
 
-                    ]),
-                Fieldset::make('Data Bahan')
+                    ])
+                    ->columns(2),
+                Section::make('Data Bahan')
+                    ->description('data bahan/item yang dikenakan untuk suatu pengerjaan')
                     ->schema(
                         [
                             Repeater::make('bahan_engineer')
@@ -124,7 +128,8 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             ->maxLength(255)
                             ->required(),
                     ),
-                Fieldset::make('Detail Pengerjaan')
+                Section::make('Detail Pengerjaan')
+                    ->description('data pengerjaan before, onprogress, after')
                     ->schema([
 
                         Forms\Components\Textarea::make('deskripsi_masalah')
@@ -157,6 +162,7 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             ->deletable(false)
                             ->openable(),
                     ])
+                    ->columns(2)
             ]);
     }
 
