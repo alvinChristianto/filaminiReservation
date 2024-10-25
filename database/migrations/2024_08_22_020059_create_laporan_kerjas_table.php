@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('tipe_laporan', ['Head Office', 'Kunjungan Cabang']);
             $table->json('bahan_engineer')->nullable();
             $table->text('detail_bahan_engineer')->nullable();
+            $table->unsignedInteger('harga_total')->nullable();
             $table->dateTime('jam_mulai')->nullable();
             $table->dateTime('jam_selesai')->nullable();
             $table->text('deskripsi_masalah')->nullable();

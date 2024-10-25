@@ -206,7 +206,7 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
                             Column::make('jam_mulai'),
                             Column::make('jam_selesai'),
                             Column::make('detail_bahan_engineer'),
-                            // Column::make('bahan_engineer'),
+                            Column::make('harga_total'),
 
                             //  ->formatStateUsing(fn ($state) => substr($state, strrpos($state[0], ',') + 1)),      //the data with repeater as json data
                             Column::make('deskripsi_masalah'),
