@@ -18,4 +18,9 @@ class Divisi extends Model
     {
         return $this->hasMany(laporankerja::class);
     }
+
+    public function inventory_items(): HasMany
+    {
+        return $this->hasMany(Inventory_item::class);
+    }
 }
