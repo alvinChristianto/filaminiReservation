@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('inventory_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('inventory_item_id')->constrained('inventory_items')->cascadeOnDelete();
+            $table->string('inventory_item_id')->constrained('inventory_items')->cascadeOnDelete();
             $table->string('adjustment_type');
             $table->text('reason')->nullable();
             $table->integer('previous_qty')->nullable();

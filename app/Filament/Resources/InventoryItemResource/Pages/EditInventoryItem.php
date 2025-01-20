@@ -13,7 +13,13 @@ class EditInventoryItem extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            // Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        unset($data['status_now']);
+        return $data;
     }
 }

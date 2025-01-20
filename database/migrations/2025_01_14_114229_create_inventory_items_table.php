@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inventory_items', function (Blueprint $table) {
-            $table->id();
+            $table->string('id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('quantity')->nullable();
             $table->string('unit');
+            $table->dateTime('buying_date')->nullable();
+            $table->unsignedInteger('price')->nullable();
             $table->foreignId('divisi_id')->constrained('divisis')->cascadeOnDelete();
             $table->timestamps();
         });

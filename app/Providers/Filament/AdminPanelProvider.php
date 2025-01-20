@@ -43,11 +43,11 @@ class AdminPanelProvider extends PanelProvider
             ->font('Poppins')
             ->colors([
                 'primary' => Color::Orange,
-                'danger' => Color::Rose,
+                'danger' => Color::Red,
                 'gray' => Color::Gray,
                 'info' => Color::Blue,
                 'success' => Color::Emerald,
-                'warning' => Color::Rose,
+                'warning' => Color::Yellow,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

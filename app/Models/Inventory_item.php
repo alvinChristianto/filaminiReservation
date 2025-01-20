@@ -11,6 +11,10 @@ class Inventory_item extends Model
 {
     use HasFactory;
     
+    protected $primaryKey = 'id';
+    protected $casts = ['id' => 'string'];
+    protected $keyType = 'string';
+    
     public function divisi(): BelongsTo
     {
         return $this->belongsTo(Divisi::class);

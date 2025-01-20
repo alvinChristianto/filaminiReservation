@@ -9,6 +9,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists;
+use Filament\Tables\Columns\BadgeColumn;
 
 class InventoryHistoriesRelationManager extends RelationManager
 {
@@ -20,6 +22,7 @@ class InventoryHistoriesRelationManager extends RelationManager
             ->schema([
 
                 Forms\Components\Select::make('adjustment_type')
+                    ->label('status barang')
                     ->options([
                         'baru' => 'baru',
                         'bekas_layak' => 'bekas layak',
@@ -28,6 +31,7 @@ class InventoryHistoriesRelationManager extends RelationManager
                     ])
                     ->required(),
                 Forms\Components\Textarea::make('reason')
+                    ->label('deskripsi status barang')
                     ->required()
                     ->maxLength(255)
                     ->rows(3)
@@ -35,12 +39,16 @@ class InventoryHistoriesRelationManager extends RelationManager
 
 
                 Forms\Components\TextInput::make('previous_qty')
+                    ->label('jumlah terakhir')
                     ->numeric(),
 
                 Forms\Components\TextInput::make('current_qty')
+
+                    ->label('jumlah sekarang')
                     ->numeric(),
 
                 Forms\Components\TextInput::make('adjusted_by')
+                    ->label('inventarisasi oleh')
                     ->required()
                     ->maxLength(100),
 
@@ -52,9 +60,21 @@ class InventoryHistoriesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('reason')
             ->columns([
-                Tables\Columns\TextColumn::make('adjustment_type'),
-                Tables\Columns\TextColumn::make('reason'),
-                Tables\Columns\TextColumn::make('adjusted_by'),
+                Tables\Columns\TextColumn::make('adjustment_type')
+                    ->label('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'baru' => 'success',
+                        'bekas_layak' => 'warning',
+                        'bekas_rusak' => 'warning',
+                        'rusak' => 'danger',
+                    }),
+                Tables\Columns\TextColumn::make('reason')
+                    ->label('deskripsi status'),
+                Tables\Columns\TextColumn::make('adjusted_by')
+                    ->label('petugas'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('waktu record'),
             ])
             ->filters([
                 //
@@ -67,8 +87,7 @@ class InventoryHistoriesRelationManager extends RelationManager
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                ]),
+                Tables\Actions\BulkActionGroup::make([]),
             ]);
     }
 }
