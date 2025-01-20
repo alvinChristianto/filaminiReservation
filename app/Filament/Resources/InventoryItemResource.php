@@ -119,9 +119,9 @@ class InventoryItemResource extends Resource
                     ->sortable('desc'),
                 Tables\Columns\TextColumn::make('unit'),
                 Tables\Columns\TextColumn::make('buying_date')
-                    ->label('waktu beli'),
+                    ->label('waktu beli')->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('waktu record'),
+                    ->label('waktu record')->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('divisi')
