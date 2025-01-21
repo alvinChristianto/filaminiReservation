@@ -11,17 +11,23 @@ class CreatePengajuan extends CreateRecord
 {
     protected static string $resource = PengajuanResource::class;
 
-    protected function handleRecordCreation(array $data): Model
-    {
-        $data['user_id'] = auth()->id(); // Add user_id to the data array
+    // protected function handleRecordCreation(array $data): Model
+    // {
+    //     $data['user_id'] = auth()->id(); // Add user_id to the data array
 
-        $record = static::getModel()::create($data);
-        return $record;
-    }
+    //     $record = static::getModel()::create($data);
+    //     return $record;
+    // }
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['last_edited_by_id'] = auth()->id();
+        $data['user_id'] = auth()->id();
 
         return $data;
+    }
+    
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }

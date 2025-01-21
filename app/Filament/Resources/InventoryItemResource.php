@@ -98,7 +98,6 @@ class InventoryItemResource extends Resource
                         'bekas_rusak' => 'bekas rusak',
                         'rusak' => 'rusak',
                     ])
-                    ->required(),
 
 
             ]);
