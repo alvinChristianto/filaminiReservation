@@ -113,6 +113,9 @@ class InventoryItemResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Barang')
                     ->searchable(isIndividual: true),
+                Tables\Columns\TextColumn::make('divisi.nama')
+                    ->label('cabang')
+                    ->searchable(isIndividual: true),
                 Tables\Columns\TextColumn::make('quantity')
                     ->label('jumlah awal')
                     ->sortable('desc'),

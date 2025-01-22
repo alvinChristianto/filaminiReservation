@@ -34,6 +34,7 @@ class LaporanKerjaResource extends Resource implements HasShieldPermissions
     protected static ?string $navigationGroup = 'Laporan Kerja';
     protected static ?string $navigationLabel = 'Laporan Kerja';
     protected static ?string $modelLabel = 'Laporan Kerja';
+    protected static ?string $slug = 'laporan-kerja';
 
 
 

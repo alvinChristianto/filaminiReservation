@@ -34,6 +34,7 @@ class PengajuanResource extends Resource implements HasShieldPermissions
 
     protected static ?string $navigationGroup = 'Pengajuan';
     protected static ?string $navigationLabel = 'Master Pengajuan';
+    protected static ?string $slug = 'pengajuan';
 
     public static function form(Form $form): Form
     {
